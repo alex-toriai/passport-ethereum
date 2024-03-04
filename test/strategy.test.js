@@ -4,24 +4,25 @@ var Strategy = require('../lib/strategy');
 
 
 describe('Strategy', function() {
-  
+
   var clock;
-  
+
   afterEach(function() {
     clock && clock.restore();
   });
-  
-  
+
+
   it('should be named ethereum', function() {
-    var strategy = new Strategy(function(){});
-    
+    var strategy = new Strategy(function() {
+    });
+
     expect(strategy.name).to.equal('ethereum');
   });
-  
+
   it('should verify address', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
       expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
-      return cb(null, { id: '248289761001' });
+      return cb(null, {id: '248289761001'});
     }))
       .request(function(req) {
         req.connection = {};
@@ -47,7 +48,7 @@ describe('Strategy', function() {
         };
       })
       .success(function(user, info) {
-        expect(user).to.deep.equal({ id: '248289761001' });
+        expect(user).to.deep.equal({id: '248289761001'});
         expect(info).to.be.undefined;
         expect(this.session).to.deep.equal({
           messages: []
@@ -57,12 +58,12 @@ describe('Strategy', function() {
       .error(done)
       .authenticate();
   }); // should verify address
-  
+
   it('should verify address and chain id', function(done) {
     chai.passport.use(new Strategy(function(address, chainId, cb) {
       expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
       expect(chainId).to.equal(1);
-      return cb(null, { id: '248289761001' });
+      return cb(null, {id: '248289761001'});
     }))
       .request(function(req) {
         req.connection = {};
@@ -88,7 +89,7 @@ describe('Strategy', function() {
         };
       })
       .success(function(user, info) {
-        expect(user).to.deep.equal({ id: '248289761001' });
+        expect(user).to.deep.equal({id: '248289761001'});
         expect(info).to.be.undefined;
         expect(this.session).to.deep.equal({
           messages: []
@@ -98,11 +99,11 @@ describe('Strategy', function() {
       .error(done)
       .authenticate();
   }); // should verify address and chain id
-  
+
   it('should fail when URI is invalid', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
       expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
-      return cb(null, { id: '248289761001' });
+      return cb(null, {id: '248289761001'});
     }))
       .request(function(req) {
         req.connection = {};
@@ -128,18 +129,18 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'URI mismatch.' });
+        expect(challenge).to.deep.equal({message: 'URI mismatch.'});
         expect(status).to.equal(403);
         done();
       })
       .error(done)
       .authenticate();
   }); // should fail when URI is invalid
-  
+
   it('should fail when message is expired', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
       expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
-      return cb(null, { id: '248289761001' });
+      return cb(null, {id: '248289761001'});
     }))
       .request(function(req) {
         req.connection = {};
@@ -166,20 +167,20 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Expired message.' });
+        expect(challenge).to.deep.equal({message: 'Expired message.'});
         expect(status).to.equal(403);
         done();
       })
       .error(done)
       .authenticate();
   }); // should fail when message is expired
-  
+
   it('should fail when message is not yet valid', function(done) {
     clock = sinon.useFakeTimers(1654640839635);
-    
+
     chai.passport.use(new Strategy(function(address, cb) {
       expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
-      return cb(null, { id: '248289761001' });
+      return cb(null, {id: '248289761001'});
     }))
       .request(function(req) {
         req.connection = {};
@@ -206,20 +207,20 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Message not yet valid.' });
+        expect(challenge).to.deep.equal({message: 'Message not yet valid.'});
         expect(status).to.equal(403);
         done();
       })
       .error(done)
       .authenticate();
   }); // should fail when message is not yet valid
-  
+
   it('should fail when nonce is invalid', function(done) {
     clock = sinon.useFakeTimers(1654640839635);
-    
+
     chai.passport.use(new Strategy(function(address, cb) {
       expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
-      return cb(null, { id: '248289761001' });
+      return cb(null, {id: '248289761001'});
     }))
       .request(function(req) {
         req.connection = {};
@@ -245,18 +246,18 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Invalid nonce.' });
+        expect(challenge).to.deep.equal({message: 'Invalid nonce.'});
         expect(status).to.equal(403);
         done();
       })
       .error(done)
       .authenticate();
   }); // should fail when message is invalid
-  
+
   it('should fail when signature is invalid', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
       expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
-      return cb(null, { id: '248289761001' });
+      return cb(null, {id: '248289761001'});
     }))
       .request(function(req) {
         req.connection = {};
@@ -282,18 +283,18 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Invalid signature.: 0x09967aCB4912a3efDb66039b8BC8ABb202a0f3E4 !== 0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758' });
+        expect(challenge).to.deep.equal({message: 'Signature does not match address of the message.'});
         expect(status).to.equal(403);
         done();
       })
       .error(done)
       .authenticate();
   }); // should fail when signature is invalid
-  
+
   it('should fail when message is malformed (missing address)', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
       expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
-      return cb(null, { id: '248289761001' });
+      return cb(null, {id: '248289761001'});
     }))
       .request(function(req) {
         req.connection = {};
@@ -318,14 +319,14 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Malformed message.' });
+        expect(challenge).to.deep.equal({message: 'Malformed message.'});
         expect(status).to.equal(403);
         done();
       })
       .error(done)
       .authenticate();
   }); // should fail when message is malformed (missing address)
-  
+
   it('should fail when missing message', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
       throw new Error('verify function should not be called');
@@ -341,14 +342,14 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Missing message.' });
+        expect(challenge).to.deep.equal({message: 'Missing message.'});
         expect(status).to.equal(400);
         done();
       })
       .error(done)
       .authenticate();
   });
-  
+
   it('should fail when missing signature', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
       throw new Error('verify function should not be called');
@@ -373,12 +374,12 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Missing signature.' });
+        expect(challenge).to.deep.equal({message: 'Missing signature.'});
         expect(status).to.equal(400);
         done();
       })
       .error(done)
       .authenticate();
   });
-  
+
 });
